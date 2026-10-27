@@ -1,0 +1,7 @@
+interface:
+  display_name: "Bounded Delivery"
+  short_description: "Scope contract + one proof, then stop"
+  default_prompt: "Use $bounded-delivery to complete this request within a minimum sufficient scope and proof budget."
+
+policy:
+  allow_implicit_invocation: true

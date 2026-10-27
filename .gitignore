@@ -1,0 +1,14 @@
+/*
+!/.gitignore
+!/Skills/
+/Skills/*
+!/Skills/Owned/
+
+__pycache__/
+*.py[cod]
+.venv/
+.DS_Store
+Thumbs.db
+desktop.ini
+.env
+.env.*
