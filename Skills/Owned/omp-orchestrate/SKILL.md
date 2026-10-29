@@ -16,9 +16,9 @@ Default to no child. Sol handles small or tightly coupled tasks inline. Delegate
 - A substantial package can produce a complete, independently checkable result.
 - Scope, evidence, interfaces and file ownership can be handed over concisely.
 - Sol can accept the result without redoing the same investigation or implementation.
-- Avoided Sol work plausibly exceeds handoff, child context, extra review and rework.
+- The numeric handoff gate in `cost-policy.md` passes: child + additional Sol coordination/review + rework costs less than avoided Sol work, using conservative estimates. An explicit model request or consequential risk exception must be stated as such, not called savings.
 
-Sol specifies enough to bound the result, not a full solution followed by a worker copying it. Task size alone does not justify delegation. Read `cost-policy.md` when the economic choice is unclear; choose inline execution when no advantage is identifiable. Once all four gates hold and host policy permits delegation, actually invoke `task` without asking the user to dispatch it. Writing a worker assignment in a plan is not execution. A planning-only request may legitimately stop with the requested plan.
+Sol specifies enough to bound the result, not a full solution followed by a worker copying it. Task size alone does not justify delegation. For a nontrivial package, read `cost-policy.md` once and reuse its price weights; estimate the avoided and added token costs or ranges without solving the package. If the conservative added cost is not below avoided cost, stay inline and name the failed gate. Once all four gates hold and host policy permits delegation, actually invoke `task` without asking the user to dispatch it. Writing an assignment in a plan is not execution. A planning-only request may stop with its requested plan.
 
 **Ready:** for nontrivial settled work, identify a complete remaining package once before implementation. In one sentence, say what leaves Sol and how it is accepted, or which handoff gate fails if kept inline. Small tasks need no report; do not disguise a substantial repetitive package as unrelated tiny edits.
 
@@ -65,6 +65,12 @@ Return completed behavior or requested planning decisions, observed verification
 **Complete:** all required deliverables and acceptance checks have passed. Child completion alone is not final acceptance.
 
 **Blocked:** a required deliverable or check cannot be completed; name what remains unaccepted, the missing prerequisite and next action. This stops the affected path, not successful completion. If delegation adds coordination or rework without removing Sol work, stop spawning and finish reachable work in Sol.
+
+## 5. Save observed usage
+
+At completion or a blocker, refresh local usage snapshots by running `python scripts/usage.py collect --scan`, resolving the script against this skill's directory. This reads existing sessions locally; it does not call another model or export conversations. If commands are unavailable, report collection as not run. Read `usage-data.md` when labelling samples, changing storage or comparing results.
+
+The accounting unit is a whole root session plus its children, not an individual turn. Use one fresh session per comparable task; mixed conversations and smoke runs are not real-task baselines. Scan preserves manual labels and leaves unknown outcomes unknown. Only label a specific root session accepted after its actual required checks passed; never label every scanned session based on the current task. Usage collection is observational and does not turn blocked work into complete.
 
 ## Provenance
 
