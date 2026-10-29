@@ -1,6 +1,6 @@
 ---
 name: omp-astra
-description: Read-only architecture decisions for an explicitly scoped omp-orchestrate work package.
+description: Read-only architecture decisions for an explicitly scoped AZA-Omp-Orchestrate work package.
 model: openai-codex/gpt-6-astra
 thinking-level: high
 tools: [read, grep, glob, web_search]

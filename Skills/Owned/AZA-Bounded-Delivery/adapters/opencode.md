@@ -1,13 +1,13 @@
 # OpenCode
 
-Install: junction this skill folder to `~/.config/opencode/skills/bounded-delivery`.
+Install: junction this skill folder to `~/.config/opencode/skills/AZA-Bounded-Delivery`.
 
 OpenCode also reads `~/.agents/skills/` and `~/.claude/skills/`. It does not read `~/.codex/skills/`. Prefer the OpenCode path or `.agents`. One junction is enough.
 
 ## Invoke
 
-- Native skill tool, id `bounded-delivery` (from the folder name).
-- Frontmatter `name` must stay `bounded-delivery` and match the folder.
+- Native skill tool, id `AZA-Bounded-Delivery` (from the folder name).
+- Frontmatter `name` must stay `AZA-Bounded-Delivery` and match the folder.
 - User can also name the skill in chat.
 
 ## Extra OpenCode fields

@@ -1,9 +1,9 @@
 ---
-name: obsidian-vault
+name: AZA-Obsidian-Vault
 description: Search, create, and organize notes in the current Obsidian vault with wikilinks and hierarchical index notes. Use when the user wants to find, create, or organize notes in Obsidian.
 ---
 
-# Obsidian Vault
+# AZA-Obsidian-Vault
 
 ## Vault location
 

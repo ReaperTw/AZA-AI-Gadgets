@@ -4,7 +4,7 @@ Consult this reference when discovery, routing or nesting differs from the reque
 
 ## Discovery
 
-Skills are discovered at startup. Restart omp after installing this skill so its metadata and `/skill:omp-orchestrate` command are available. Task execution rediscovers agent files, so a newly installed agent can resolve before the tool description lists it. An unknown agent error is a discovery failure, not permission to substitute another model.
+Skills are discovered at startup. Restart omp after installing this skill so its metadata and `/skill:AZA-Omp-Orchestrate` command are available. Task execution rediscovers agent files, so a newly installed agent can resolve before the tool description lists it. An unknown agent error is a discovery failure, not permission to substitute another model.
 
 Same-named project `.omp/agents/*.md` definitions take precedence over user `~/.omp/agent/agents/*.md`. On first use in a project or when routing/behavior is unexpected, check the effective definition/source, including `agentSource` in task metadata when available. Matching model identity alone does not prove the updated role contract was loaded. If source evidence is unavailable, report it as unverified rather than declaring the new contract active.
 

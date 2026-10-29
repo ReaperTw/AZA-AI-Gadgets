@@ -1,9 +1,9 @@
 ---
-name: omp-orchestrate
+name: AZA-Omp-Orchestrate
 description: Cost-aware work sharing in omp. Use when Sol should retain judgment while delegating complete, bounded work to Luna without agent fan-out or duplicate work.
 ---
 
-# OMP Orchestrate
+# AZA-Omp-Orchestrate
 
 Sol steers; Luna executes work that can genuinely leave Sol's workload. Optimize completed-task cost and correctness against Sol working alone, not worker count or raw speed.
 

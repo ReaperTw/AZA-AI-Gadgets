@@ -124,3 +124,5 @@
 - huashu-motion 的 GitHub 位置由原稿 `npx skills add alchaincyf/huashu-motion` 推得，尚未線上確認。
 - archival-doc 沒有倉庫連結；anatomy 沒有功能說明；兩者不作無條件首選。
 - 寫作流水線另存上層 `AZA-Writing-Resources.md`，不是本導航的候選資源。
+- Skill 名稱與安裝目錄統一為 `AZA-Animate-Skill-Navigator`。Antigravity 桌面版與 CLI 安裝至 `~/.gemini/config/skills/AZA-Animate-Skill-Navigator` 的實體目錄；Windows 掃描器會略過 junction，更新時同步複製來源檔案。
+- 已由執行中的 Antigravity `getAllSkills` 確認此大小寫名稱可載入、slash command 啟用；保留原本僅使用者調用的設定。舊小寫安裝目錄需改名，不同時保留兩份。

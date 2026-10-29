@@ -1,4 +1,4 @@
-"""Junction bounded-delivery into local Agent Skills roots. No copies."""
+"""Junction AZA-Bounded-Delivery into local Agent Skills roots. No copies."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 CANON = Path(__file__).resolve().parents[1]
-NAME = "bounded-delivery"
+NAME = "AZA-Bounded-Delivery"
 HOME = Path.home()
 LOCAL = Path(os.environ.get("LOCALAPPDATA", HOME / "AppData" / "Local"))
 HERMES_HOME = Path(os.environ.get("HERMES_HOME", LOCAL / "hermes"))
@@ -76,8 +76,8 @@ def main() -> int:
         print(f"missing {skill}", file=sys.stderr)
         return 1
     text = skill.read_text(encoding="utf-8")
-    if "name: bounded-delivery" not in text:
-        print("SKILL.md missing name: bounded-delivery", file=sys.stderr)
+    if "name: AZA-Bounded-Delivery" not in text:
+        print("SKILL.md missing name: AZA-Bounded-Delivery", file=sys.stderr)
         return 1
     print(f"canonical: {CANON}")
     failed = 0

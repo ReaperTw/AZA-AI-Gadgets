@@ -1,10 +1,10 @@
-# omp-orchestrate
+# AZA-Omp-Orchestrate
 
 Sol 主控、Luna 選擇性執行的 omp skill。目的是把完整工作真正移出 Sol，而非開越多代理越好；若交接與重工不划算，就由 Sol 直接完成。不更動全域 settings 或內建 agents。
 
 ## 使用
 
-安裝後開一個新的 omp session，讓 skill 與 slash command 被載入：
+安裝後開一個新的 omp session，讓 skill 與 slash command 被載入；每次更新 skill 名稱或安裝內容後也必須重開 session：
 
 ```powershell
 omp --model openai-codex/gpt-6.1-sol --thinking medium
@@ -13,16 +13,16 @@ omp --model openai-codex/gpt-6.1-sol --thinking medium
 只規劃：
 
 ```text
-/skill:omp-orchestrate 規劃這個功能，先給必要決策與驗收條件，暫不修改程式。
+/skill:AZA-Omp-Orchestrate 規劃這個功能，先給必要決策與驗收條件，暫不修改程式。
 ```
 
 規劃並執行：
 
 ```text
-/skill:omp-orchestrate 實作這個功能。Sol 掌舵；可完整交付、且交接划算的工作交給 Luna，其他直接完成。不要重複實作，整合後驗證。
+/skill:AZA-Omp-Orchestrate 實作這個功能。Sol 掌舵；可完整交付、且交接划算的工作交給 Luna，其他直接完成。不要重複實作，整合後驗證。
 ```
 
-自然語言要求這組多模型協作也會符合 skill 的觸發描述。Slash command 需 omp 的 skill commands 功能已啟用；若停用，在提示中直接要求讀取並使用 `omp-orchestrate`。
+自然語言要求這組多模型協作也會符合 skill 的觸發描述。Slash command 需 omp 的 skill commands 功能已啟用；若停用，在提示中直接要求讀取並使用 `AZA-Omp-Orchestrate`。
 
 主 session 用 Sol；skill 不會自動切換主模型。預設不開子代理，需要時同時最多一個；只有你明確要求平行、且工作互不干涉時才放寬。小任務或緊密耦合工作由 Sol 完成。Luna 保持 medium effort；Sol 的 effort 沿用你啟動時的選擇，並非 skill 強制設定。
 
@@ -34,7 +34,7 @@ omp --model openai-codex/gpt-6.1-sol --thinking medium
 - 成本權重與計算唯一來源：`cost-policy.md`。依 API 價格分開計算一般輸入、快取輸入與輸出；派工需「子代理＋額外交接／審查＋重工」的保守上界，小於「實際省下的 Sol 工作」下界。相等或區間重疊不算通過；必要的風險／明確指定模型例外要另說明，不能冒稱省錢。此權重不代表訂閱扣額倍率，也不是執行期硬性預算。
 - 實際資料累積：`usage-data.md`。標準函式庫收集器將主控與子代理用量存到 `~/.omp/agent/orchestration-data/`，不複製對話；結束／受阻時 skill 要求刷新快照，也可手動收集與統計。資料不在公開 repository 中。
 
-安裝／更新對照：本目錄的 `SKILL.md`、`README.md`、`runtime.md`、`cost-policy.md`、`usage-data.md`、`LICENSE` 及 `scripts/` 放到 `~/.omp/agent/skills/omp-orchestrate/`；`agents/omp-luna.md`、`omp-terra.md`、`omp-astra.md` 放到 `~/.omp/agent/agents/`。更新後重開 session。專案 `.omp/agents/` 中同名定義優先，不能只更新使用者副本就假設該專案也生效；首次使用或異常時確認有效來源。
+安裝／更新對照：本目錄的 `SKILL.md`、`README.md`、`runtime.md`、`cost-policy.md`、`usage-data.md`、`LICENSE` 及 `scripts/` 放到 `~/.omp/agent/skills/AZA-Omp-Orchestrate/`；`agents/omp-luna.md`、`omp-terra.md`、`omp-astra.md` 放到 `~/.omp/agent/agents/`。更新後重開 session，使新名稱與 slash command 可用。專案 `.omp/agents/` 中同名定義優先，不能只更新使用者副本就假設該專案也生效；首次使用或異常時確認有效來源。
 
 審查修正：非瑣碎已定案工作需評估一次完整工作包；不派工指出未滿足的條件。續派必須有資訊增量；使用者明確指定角色不可靜默替換。診斷實驗須 host 允許且明確授權，最終驗收仍由 Sol 執行。必要驗收受阻應列 blocked，不算 complete。
 

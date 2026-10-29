@@ -36,10 +36,10 @@ def relevant(rows):
     for row in rows:
         msg = row.get('message', {})
         for part in msg.get('content', []) if isinstance(msg.get('content'), list) else []:
-            if part.get('type') == 'text' and msg.get('role') == 'user' and 'omp-orchestrate' in part.get('text', ''):
+            if part.get('type') == 'text' and msg.get('role') == 'user' and ('AZA-Omp-Orchestrate' in part.get('text', '') or 'omp-orchestrate' in part.get('text', '')):
                 return True
             if part.get('type') == 'toolCall' and part.get('name') == 'read':
-                if 'omp-orchestrate' in str(part.get('arguments', {}).get('path', '')):
+                if 'AZA-Omp-Orchestrate' in str(part.get('arguments', {}).get('path', '')) or 'omp-orchestrate' in str(part.get('arguments', {}).get('path', '')):
                     return True
     return False
 

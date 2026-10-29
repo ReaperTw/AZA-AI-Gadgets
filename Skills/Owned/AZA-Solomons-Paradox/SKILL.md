@@ -1,10 +1,10 @@
 ---
-name: solomons-paradox
+name: AZA-Solomons-Paradox
 description: 所羅門悖論：先看他人的處境，再把自己形成的評價帶回自身。AI 只引導，人類自己思考。
 disable-model-invocation: true
 ---
 
-# Solomon’s Paradox｜所羅門悖論
+# AZA-Solomons-Paradox｜所羅門悖論
 
 讓使用者先對他人的處境形成自己的看法，再把這份看法與自身連結。AI 負責換視角與提問，評價和理解由使用者產生。
 

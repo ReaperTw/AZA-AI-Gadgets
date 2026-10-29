@@ -1,11 +1,11 @@
 ---
-name: aiwiki-compiler
+name: AZA-Aiwiki-Compiler
 description: Compile and maintain the DriveSync AIWiki through Ingest, Query, Lint, and Ignore.
 argument-hint: "ingest <path> | query <question> | lint | ignore <path> [reason]"
 disable-model-invocation: true
 ---
 
-# AIWiki Compiler
+# AZA-Aiwiki-Compiler
 
 Maintain AIWiki as DriveSync's knowledge relation layer: reusable concepts, semantic relations, viewpoint changes, and provenance. Keep raw material in place; AIWiki is neither a backup nor a summary warehouse.
 
@@ -23,7 +23,7 @@ Maintain AIWiki as DriveSync's knowledge relation layer: reusable concepts, sema
 
 ### Ingest
 
-Use for `$aiwiki-compiler ingest <source>` or a request to compile specified material.
+Use for `$AZA-Aiwiki-Compiler ingest <source>` or a request to compile specified material.
 
 - Resolve every source inside the user-authorized scope. Keep source files read-only and modify only `<AIWikiRoot>/**` unless the user explicitly expands scope.
 - If a source exactly matches `<AIWikiRoot>/ignore.md`, report that it is excluded and make no knowledge pages for it.
@@ -35,7 +35,7 @@ Use for `$aiwiki-compiler ingest <source>` or a request to compile specified mat
 
 ### Query
 
-Use for `$aiwiki-compiler query <question>` or a request to answer from AIWiki.
+Use for `$AZA-Aiwiki-Compiler query <question>` or a request to answer from AIWiki.
 
 - Start at `<AIWikiRoot>/index.md`, follow only relevant concept and source links, and distinguish source facts, user viewpoints, and AI inference in the answer.
 - State gaps or uncertainty instead of inventing support. Treat medical, financial, legal, and other changing claims as historical knowledge until verified against current reliable sources.
@@ -43,7 +43,7 @@ Use for `$aiwiki-compiler query <question>` or a request to answer from AIWiki.
 
 ### Lint
 
-Use for `$aiwiki-compiler lint` or after every write.
+Use for `$AZA-Aiwiki-Compiler lint` or after every write.
 
 - Check broken wikilinks, duplicate or near-duplicate concepts, missing sources, classification errors, orphan pages, stale relations, conflicting or outdated claims, and repeated source text.
 - Check actual links in maintained content. Ignore wikilink examples inside inline code or fenced code blocks, and do not apply knowledge-page schema or orphan checks to `<AIWikiRoot>/AGENTS.md`; still confirm links pointing to that file resolve.
@@ -53,7 +53,7 @@ Use for `$aiwiki-compiler lint` or after every write.
 
 ### Ignore
 
-Use for `$aiwiki-compiler ignore <source> [reason]` or when the user says material is only a memo and should stay out of AIWiki.
+Use for `$AZA-Aiwiki-Compiler ignore <source> [reason]` or when the user says material is only a memo and should stay out of AIWiki.
 
 - Add the exact DriveSync-relative source path, reason, and date to `<AIWikiRoot>/ignore.md`; deduplicate existing entries.
 - Preserve the original source. Remove its derived claims, backlinks, and registry entry. Delete a concept only when no remaining non-ignored source or reusable knowledge supports it.

@@ -27,6 +27,12 @@ def call(identity, total='0.01', *, side=False):
 
 
 class Accounting(unittest.TestCase):
+    def test_relevant_matches_current_and_historical_skill_names(self):
+        for name in ('AZA-Omp-Orchestrate', 'omp-orchestrate'):
+            rows = [dict(message=dict(role='user', content=[
+                dict(type='text', text=f'Use {name}')]))]
+            self.assertTrue(usage.relevant(rows))
+
     def test_children_side_calls_and_duplicate_events(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp) / 'root.jsonl'

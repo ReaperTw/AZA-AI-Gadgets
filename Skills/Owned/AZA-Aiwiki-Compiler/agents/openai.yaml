@@ -1,0 +1,7 @@
+interface:
+  display_name: "AZA-Aiwiki-Compiler"
+  short_description: "Compile and maintain the DriveSync AIWiki"
+  default_prompt: "Use $AZA-Aiwiki-Compiler to ingest this source into the DriveSync AIWiki."
+
+policy:
+  allow_implicit_invocation: false

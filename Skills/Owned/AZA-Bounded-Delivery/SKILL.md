@@ -1,5 +1,5 @@
 ---
-name: bounded-delivery
+name: AZA-Bounded-Delivery
 description: Bound coding work to a minimum sufficient scope contract and proof budget. Use when the user requests an implementation, bug fix, refactor, or code change without explicit acceptance boundaries; leaves testing unspecified; or reports over-testing, scope creep, overbuilding, or work that never stops.
 license: MIT
 compatibility: Any Agent Skills client (Hermes, Codex, Cursor, OpenCode, Command Code, Claude Code, Gemini CLI, Grok, Copilot, and others).
@@ -9,7 +9,7 @@ metadata:
   standard: agentskills.io
 ---
 
-# Bounded Delivery
+# AZA-Bounded-Delivery
 
 Deliver the requested outcome, prove it once, then stop.
 

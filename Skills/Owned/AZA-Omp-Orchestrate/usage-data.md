@@ -5,10 +5,10 @@
 ## 收集
 
 ```powershell
-python "$HOME/.omp/agent/skills/omp-orchestrate/scripts/usage.py" collect --scan
+python "$HOME/.omp/agent/skills/AZA-Omp-Orchestrate/scripts/usage.py" collect --scan
 ```
 
-掃描使用者層級原生 sessions 中有 `omp-orchestrate` 使用痕跡的頂層 session，連同其現存子代理 transcript，將 assistant usage 與 `model_usage` 額外呼叫統整。每個 root session 一份 JSON；重跑更新同一份，不累加重複用量。這是快照而非 daemon，不會即時監控；skill 要求結束或受阻時執行收集，若 host 禁止命令，請手動執行。讀取檔案不需要額外模型呼叫。
+掃描使用者層級原生 sessions 中有 `AZA-Omp-Orchestrate` 或歷史名稱 `omp-orchestrate` 使用痕跡的頂層 session，連同其現存子代理 transcript，將 assistant usage 與 `model_usage` 額外呼叫統整。每個 root session 一份 JSON；重跑更新同一份，不累加重複用量。這是快照而非 daemon，不會即時監控；skill 要求結束或受阻時執行收集，若 host 禁止命令，請手動執行。讀取檔案不需要額外模型呼叫。
 
 原始 transcript 已被清理的子代理無法補回，會回報警告；缺少成本不當作零成本。fork／匯入 lineage 暫不當作乾淨樣本收集，避免繼承歷史誤算。未完成的最後一行會標警告，其餘損壞行拒絕匯入。
 
@@ -17,7 +17,7 @@ python "$HOME/.omp/agent/skills/omp-orchestrate/scripts/usage.py" collect --scan
 以**一個新 session 做一個任務**，避免整段多任務對話混算。接受與否由主控依實際驗收指定，不從最後一句話推測。自動掃描預設 `unknown`／`unclassified`，後續更新不會覆蓋人工標籤。
 
 ```powershell
-python "$HOME/.omp/agent/skills/omp-orchestrate/scripts/usage.py" collect "完整的 root-session.jsonl 路徑" --kind real --task-kind parser --outcome accepted
+python "$HOME/.omp/agent/skills/AZA-Omp-Orchestrate/scripts/usage.py" collect "完整的 root-session.jsonl 路徑" --kind real --task-kind parser --outcome accepted
 ```
 
 `--outcome` 可用 accepted、blocked、failed、unknown；`--kind` 可用 real、smoke、mixed、unclassified。`task-kind` 用不敏感的短分類，不放原始需求。手動標籤與自動收集勿同時執行；目前快照更新是 atomic replacement，不是多寫入者資料庫。
@@ -27,7 +27,7 @@ python "$HOME/.omp/agent/skills/omp-orchestrate/scripts/usage.py" collect "完�
 ## 統計
 
 ```powershell
-python "$HOME/.omp/agent/skills/omp-orchestrate/scripts/usage.py" summary
+python "$HOME/.omp/agent/skills/AZA-Omp-Orchestrate/scripts/usage.py" summary
 ```
 
 依樣本種類、任務類型、主模型與 inline／delegated 分組，顯示驗收結果、主控／子代理成本、各類 token 與缺漏。smoke 預設排除，可加 `--include-smoke`。重複 response IDs 全域去重；跨樣本共享呼叫會標 shared_calls，不能據此比較每組效率。沒有成本資料的呼叫另列 missing_cost_calls；數字是已知成本合計，不是帳單保證。
