@@ -53,3 +53,5 @@ omp --model openai-codex/gpt-6.1-sol --thinking medium
 價格權重 smoke（session `01a18196-6753-7787-8cc9-7c6b2ee7d829`）由 Sol 讀取新版規則，對指定的保守 token 估計計算四個案例：Luna 通過、交接成本過高拒絕、Terra 的總成本超過直接 Sol 時拒絕、成本相等拒絕。金額與獨立 Decimal 計算一致；另以計算檢查快取分離、零節省與估計區間重疊。這是給定用量下的計算與決策驗證，不是預測實際 token 用量或訂閱扣額的準確度驗證。
 
 用量收集驗證：4 個標準函式庫回歸測試通過，涵蓋主控／子代理／額外模型呼叫、重複 response 去重、同 session 更新不增筆且保留標籤、缺漏成本、未完成 JSONL 尾行、fork 拒收與 smoke 排除。另已用原生 collector 匯入 6 個現存 root-session 快照；已知 smoke 與長對話分別標為 smoke／mixed，其餘未分類、不自動宣稱成功。這些不是 6 組正式成本對照。
+
+精簡版：主 `SKILL.md` 由 9,100 縮為 4,623 字元（減少 49.2%，不是帳單 token 節省率）。診斷實驗細節移至有條件讀取的 `runtime.md`；成本與資料收集仍各有單一參考來源。安裝版 Sol 情境 smoke 確認：小修改 inline、CLI／DOM 不派 Terra、符合條件的桌面 AX 工作可派 Terra、無新資訊不重試、指定 Astra 失敗不替換、必要驗收未執行不算完成、成本相等不派工。未進行桌面操作或新增代理，未變更 effort、價格或安全限制。

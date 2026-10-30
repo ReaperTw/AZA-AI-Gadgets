@@ -22,6 +22,10 @@ The documented default recursion depth is two child levels, but this policy need
 
 OMP's actual read-only plan mode may restrict tools and agent spawn policy beyond this skill's planning-only contract. Respect the active schema; hidden custom agents mean inline planning for policy-selected work, or blocked for user-explicit role requests. Mark unexercised routes accurately. Do not change depth or plan-mode settings to bypass a restriction.
 
+## Diagnostic experiments
+
+Children skip mid-flight build/lint/tests/formatters unless assigned verification-only work. A diagnostic experiment additionally requires host permission and Sol's explicit command, scope and purpose; authorization is not blanket test permission or final acceptance. Never rerun a user-reported failure just to confirm it. If the host forbids an essential experiment, supply its evidence before handoff or bound the assignment to static diagnosis. Sol owns final integration checks and user-visible smoke.
+
 ## Sources
 
 - `omp://task-agent-discovery.md`: discovery, precedence and agent frontmatter.

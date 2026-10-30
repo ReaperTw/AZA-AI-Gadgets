@@ -1,77 +1,58 @@
 ---
 name: AZA-Omp-Orchestrate
-description: Cost-aware work sharing in omp. Use when Sol should retain judgment while delegating complete, bounded work to Luna without agent fan-out or duplicate work.
+description: Use for cost-aware Sol/Luna delegation in omp, with desktop-only Terra and exceptional Astra consultation.
 ---
 
 # AZA-Omp-Orchestrate
 
-Sol steers; Luna executes work that can genuinely leave Sol's workload. Optimize completed-task cost and correctness against Sol working alone, not worker count or raw speed.
+Sol owns decisions, integration and acceptance. Delegate complete work, not repeated reasoning. Preserve planning-only scope; this skill does not switch models.
 
-## 1. Choose whether to delegate
+## 1. Choose once
 
-Use the current Sol main session for scope, decisions, integration and acceptance. This skill cannot switch models; report the actual model and follow `README.md` to select Sol if needed. Preserve planning-only versus implementation scope.
+Small or tightly coupled tasks stay inline. Before nontrivial settled work, identify one complete package and check:
 
-Default to no child. Sol handles small or tightly coupled tasks inline. Delegate to `omp-luna` only when all hold:
+- Concise scope, evidence, interfaces, writable files and independent acceptance.
+- Sol can accept the result without repeating its implementation/investigation.
+- Conservative added child + Sol handoff/review + rework cost is below avoided Sol work. Read `cost-policy.md` once per session for weights, estimates and explicit-model/high-impact risk exceptions; exceptions are not savings.
 
-- A substantial package can produce a complete, independently checkable result.
-- Scope, evidence, interfaces and file ownership can be handed over concisely.
-- Sol can accept the result without redoing the same investigation or implementation.
-- The numeric handoff gate in `cost-policy.md` passes: child + additional Sol coordination/review + rework costs less than avoided Sol work, using conservative estimates. An explicit model request or consequential risk exception must be stated as such, not called savings.
+Give one sentence naming the work removed and acceptance, or the failed gate. Do not solve the package merely to estimate it, or fragment repetitive work into “tiny edits” to avoid assessing handoff.
 
-Sol specifies enough to bound the result, not a full solution followed by a worker copying it. Task size alone does not justify delegation. For a nontrivial package, read `cost-policy.md` once and reuse its price weights; estimate the avoided and added token costs or ranges without solving the package. If the conservative added cost is not below avoided cost, stay inline and name the failed gate. Once all four gates hold and host policy permits delegation, actually invoke `task` without asking the user to dispatch it. Writing an assignment in a plan is not execution. A planning-only request may stop with its requested plan.
+**Ready:** a gate fails → inline; all pass and host permits → actually call `task`, without asking the user to dispatch. A written assignment is not executed work.
 
-**Ready:** for nontrivial settled work, identify a complete remaining package once before implementation. In one sentence, say what leaves Sol and how it is accepted, or which handoff gate fails if kept inline. Small tasks need no report; do not disguise a substantial repetitive package as unrelated tiny edits.
+## 2. Hand off
 
-## 2. Hand off once
+Default: at most one active child; parallelism requires an explicit user request and independent packages. All roles are leaves, not a review ladder:
 
-Default to at most one active child in total and obey the host's delegation gates. Use parallel children only when the user explicitly requests parallelism and independent packages justify it. A specialist is an alternative to the worker, not another mandatory layer.
+| Agent | Eligible work / required result |
+| --- | --- |
+| `omp-luna` | Settled ordinary work → complete artifact and evidence |
+| `omp-terra` | Native desktop screenshots/AX/mouse/keyboard only → action plus fresh visual/AX evidence. Child computer capability and task-scoped approval required; no general coding, CLI debugging or DOM/CDP-only browsing |
+| `omp-astra` | Unresolved consequential architecture/interface/data-model choice → one read-only decision, invariants and tradeoff |
 
-Route by the work's remaining uncertainty:
+Roles are contracts, not proven capability rankings. Missing facts require evidence. Desktop eligibility is not permission for consequential actions; retain point-of-risk confirmation.
 
-| Agent | Input condition | Owned output | Outside its role |
-| --- | --- | --- | --- |
-| `omp-luna` | Requirements and interface are settled; ordinary implementation/planning remains | Complete bounded artifact, changes and acceptance evidence | Architecture decisions and broad unresolved technical exploration |
-| `omp-terra` | A bounded task actually requires native desktop computer use: screenshots, OS accessibility controls or mouse/keyboard interaction; computer tools are available to the child and the handoff gate passes | Completed desktop action with fresh visual/AX evidence, or a precise blocker | General coding, CLI debugging, architecture, DOM/CDP-only browser automation and team supervision |
-| `omp-astra` | Existing contracts do not settle a consequential cross-module interface, data-model or irreversible architecture choice | One selected decision with interfaces, invariants, tradeoff and acceptance | Implementation, routine code review and general status reporting |
+Set `agent` inside the task item, shared invariants in `context`, bounded output/evidence paths/files/exclusions/acceptance in `task`, actual uncertainty in `solutionSpace`. Children lack conversation history; send relevant evidence, not full histories or repeated plans. One integration owner; Sol does different work, not the child's implementation.
 
-These roles express work contracts, not benchmark-proven model rankings. Choose one appropriate child, not all three. If its required facts are missing, gather them rather than assuming a more expensive model can infer them.
+**Handed off:** actual task result/agent ID exists. Reuse that child for bounded follow-up; consume delivered results and wait only when blocked.
 
-Select `agent` inside a task item; shared `context` carries only relevant invariants, while `task` states the result, evidence paths, writable files, exclusions and acceptance. `solutionSpace` describes uncertainty. Children do not inherit the conversation; pass concise evidence, not repeated plans or the entire history.
+## 3. Resolve or stop
 
-Use the same child for bounded follow-up rather than spawning a replacement for each small edit. Sol works on genuinely different decisions or integration needs while the child runs; it does not implement the child's package in parallel. Consume auto-delivered results and wait only when blocked.
+Continue a package only with new evidence, a resolved contract question or a testable new hypothesis. An unchanged blocker stops that delegation path: no repeated wakeups or model swaps. Clarify, take work back into Sol, or choose one eligible specialist; no automatic escalation chain.
 
-**Ready:** the child owns a complete package with one integration owner; Sol's work does not duplicate it.
+For discovery, model mismatch, depth/plan-mode restrictions or diagnostic experiments, read `runtime.md`. Check effective role source on first project use or unexpected behavior. Policy-selected work may fall back to Sol; user-explicit roles/models or independent reviews must be blocked rather than silently substituted.
 
-## 3. Resolve blockers without building a ladder
+**Resolved:** a usable result or new action; otherwise name the missing prerequisite and stop the affected path.
 
-When a worker is blocked, inspect the evidence and choose one action: clarify the contract for that worker, take the package back into Sol, or consult one necessary specialist. A failed attempt is not an automatic Luna → Terra → Sol → Astra pipeline.
+## 4. Accept and record
 
-Before any follow-up on the same package, identify new evidence, a resolved contract question or a testable new hypothesis. If the same blocker has no information gain, stop that delegation path; do not wake the child or swap models to repeat it. Sol may take back work it can finish; missing external prerequisites mean blocked.
+Inspect artifacts and changed behavior, not a second implementation. Follow host verification rules; Sol owns integration checks and user-visible smoke. Avoid unchanged duplicate checks. Child completion alone is not acceptance.
 
-Select any specialist using the same economic gate and role contracts above. Terra is eligible only for actual desktop computer use, not technical uncertainty alone. Ordinary coding/CLI blockers stay with Sol or a clearly scoped Luna package. DOM/CDP-only browser work does not trigger Terra. If computer tools or task-scoped human approval are unavailable, do not dispatch Terra or substitute a nested CLI; report the desktop prerequisite. Astra remains an optional high-impact architecture consultation.
+**Complete:** every required deliverable/check passed. **Blocked:** name the unaccepted work/check, prerequisite and next action; finish independent reachable work. If coordination/rework erases the benefit, stop spawning.
 
-Specialists return directly to Sol and do not dispatch more agents. Avoid routine specialist review, recurring status reports and repeated plans. Missing facts require evidence, not merely a more expensive model.
+Return outcome, observed verification and blockers briefly. If delegated, include child ID and meaningful result; observed model comes from runtime metadata or is unverified. No routing report for small inline work.
 
-For model/discovery failures or depth restrictions, read `runtime.md`. Native definitions in `~/.omp/agent/agents/` own bindings; requested identities are not proof of the resolved model.
-
-**Resolved:** control returns to Sol with an accepted result, a targeted next action or an explicit blocker.
-
-## 4. Accept once and finish
-
-Inspect the returned artifact and relevant behavior, not a second independent implementation. Follow the host's verification schedule: children skip mid-flight build/lint/tests/formatters unless assigned verification-only work. A technical package may include a named diagnostic experiment only when host policy permits it and Sol explicitly authorizes its command, scope and purpose; this is not blanket test permission or final acceptance. Do not rerun a user-reported failure merely to confirm it. If host policy forbids the necessary experiment, supply its evidence before handoff or explicitly limit the package to static diagnosis. Sol owns post-integration checks and user-visible smoke; avoid unchanged duplicate checks.
-
-Return completed behavior or requested planning decisions, observed verification and blockers. If a child ran, give its returned ID, meaningful outcome and observed model from runtime metadata, or mark the model unverified. A claimed handoff requires an actual task result/agent ID. Policy-selected delegation may fall back to Sol when blocked; a user-explicit role/model or independent evaluation may not be silently substituted. Mark that requested part blocked and finish independent reachable work. Small inline tasks need no routing report.
-
-**Complete:** all required deliverables and acceptance checks have passed. Child completion alone is not final acceptance.
-
-**Blocked:** a required deliverable or check cannot be completed; name what remains unaccepted, the missing prerequisite and next action. This stops the affected path, not successful completion. If delegation adds coordination or rework without removing Sol work, stop spawning and finish reachable work in Sol.
-
-## 5. Save observed usage
-
-At completion or a blocker, refresh local usage snapshots by running `python scripts/usage.py collect --scan`, resolving the script against this skill's directory. This reads existing sessions locally; it does not call another model or export conversations. If commands are unavailable, report collection as not run. Read `usage-data.md` when labelling samples, changing storage or comparing results.
-
-The accounting unit is a whole root session plus its children, not an individual turn. Use one fresh session per comparable task; mixed conversations and smoke runs are not real-task baselines. Scan preserves manual labels and leaves unknown outcomes unknown. Only label a specific root session accepted after its actual required checks passed; never label every scanned session based on the current task. Usage collection is observational and does not turn blocked work into complete.
+On completion/blocker run `python scripts/usage.py collect --scan`, resolving the script against this skill directory. If unavailable, say collection was not run. It refreshes local metadata without another model call. Read `usage-data.md` only for labels, storage or comparisons: whole root-session accounting, one fresh session per task, smoke/mixed exclusion, unknown outcomes remain unknown; never bulk-mark scanned sessions accepted.
 
 ## Provenance
 
-Adapted from [fdarkaou/agent-skills: orchestrate-models](https://github.com/fdarkaou/agent-skills/blob/main/skills/fdarkaou/orchestrate-models/SKILL.md) for omp-native routing and the user's four-role policy. See `LICENSE`.
+Adapted from [orchestrate-models](https://github.com/fdarkaou/agent-skills/blob/main/skills/fdarkaou/orchestrate-models/SKILL.md). See `LICENSE`.
