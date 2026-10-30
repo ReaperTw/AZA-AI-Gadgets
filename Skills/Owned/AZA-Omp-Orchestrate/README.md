@@ -29,7 +29,7 @@ omp --model openai-codex/gpt-6.1-sol --thinking medium
 ## 維護
 
 - 流程權威：本目錄的 `SKILL.md`。
-- 子角色與模型綁定：可攜副本 `agents/` 下的原生定義；實際啟用時放到 `~/.omp/agent/agents/`。Luna 是一般工人；Terra／Astra 都是必要時的單一技術／架構支援，不再加入多層工頭鏈。
+- 子角色與模型綁定：可攜副本 `agents/` 下的原生定義；實際啟用時放到 `~/.omp/agent/agents/`。Luna 是一般工人；Terra **僅限需要桌面截圖、無障礙介面或滑鼠鍵盤的 computer use**，不處理一般程式／CLI 除錯或純 DOM 瀏覽器操作；Astra 保留必要的架構諮詢。Terra 仍須符合成本、子代理工具可用與人類授權條件。
 - 執行期例外：`runtime.md`，涵蓋 discovery、路由覆寫、深度與真正的 read-only plan mode。
 - 成本權重與計算唯一來源：`cost-policy.md`。依 API 價格分開計算一般輸入、快取輸入與輸出；派工需「子代理＋額外交接／審查＋重工」的保守上界，小於「實際省下的 Sol 工作」下界。相等或區間重疊不算通過；必要的風險／明確指定模型例外要另說明，不能冒稱省錢。此權重不代表訂閱扣額倍率，也不是執行期硬性預算。
 - 實際資料累積：`usage-data.md`。標準函式庫收集器將主控與子代理用量存到 `~/.omp/agent/orchestration-data/`，不複製對話；結束／受阻時 skill 要求刷新快照，也可手動收集與統計。資料不在公開 repository 中。

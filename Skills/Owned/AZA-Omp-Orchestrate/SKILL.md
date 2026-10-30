@@ -31,7 +31,7 @@ Route by the work's remaining uncertainty:
 | Agent | Input condition | Owned output | Outside its role |
 | --- | --- | --- | --- |
 | `omp-luna` | Requirements and interface are settled; ordinary implementation/planning remains | Complete bounded artifact, changes and acceptance evidence | Architecture decisions and broad unresolved technical exploration |
-| `omp-terra` | Implementation has a named technical uncertainty, such as a reproducible race, failed algorithm or contained technical integration; the package still meets the economic handoff gate | Implemented technical package or root-cause evidence and a targeted next experiment | Team supervision and redoing Sol's whole plan |
+| `omp-terra` | A bounded task actually requires native desktop computer use: screenshots, OS accessibility controls or mouse/keyboard interaction; computer tools are available to the child and the handoff gate passes | Completed desktop action with fresh visual/AX evidence, or a precise blocker | General coding, CLI debugging, architecture, DOM/CDP-only browser automation and team supervision |
 | `omp-astra` | Existing contracts do not settle a consequential cross-module interface, data-model or irreversible architecture choice | One selected decision with interfaces, invariants, tradeoff and acceptance | Implementation, routine code review and general status reporting |
 
 These roles express work contracts, not benchmark-proven model rankings. Choose one appropriate child, not all three. If its required facts are missing, gather them rather than assuming a more expensive model can infer them.
@@ -48,7 +48,7 @@ When a worker is blocked, inspect the evidence and choose one action: clarify th
 
 Before any follow-up on the same package, identify new evidence, a resolved contract question or a testable new hypothesis. If the same blocker has no information gain, stop that delegation path; do not wake the child or swap models to repeat it. Sol may take back work it can finish; missing external prerequisites mean blocked.
 
-Select any specialist using the same economic gate and role contracts above. Sol may route an uncertain technical package directly to Terra or a high-impact architecture decision directly to Astra; requiring a failed Luna run first would pay for an unnecessary attempt.
+Select any specialist using the same economic gate and role contracts above. Terra is eligible only for actual desktop computer use, not technical uncertainty alone. Ordinary coding/CLI blockers stay with Sol or a clearly scoped Luna package. DOM/CDP-only browser work does not trigger Terra. If computer tools or task-scoped human approval are unavailable, do not dispatch Terra or substitute a nested CLI; report the desktop prerequisite. Astra remains an optional high-impact architecture consultation.
 
 Specialists return directly to Sol and do not dispatch more agents. Avoid routine specialist review, recurring status reports and repeated plans. Missing facts require evidence, not merely a more expensive model.
 

@@ -49,7 +49,7 @@ For a nontrivial settled package, give one short estimate such as `Luna: D+H+R=$
 
 Illustrative standard-rate counts, not measured productivity: avoiding Sol's 10k fresh input + 2k output saves $0.0400. Luna using 16k fresh input + 2.4k output costs $0.0028. Extra Sol handoff/review using 2k fresh + 20k cached input + 300 output costs $0.0090. Reserving one additional Sol repair of 1k fresh + 300 output adds $0.0050. Total is $0.0168, ratio 0.42, if these upper estimates and the avoided-work lower estimate are credible.
 
-Luna is not always cheaper: extra Sol work can consume the entire saving. Terra must pass the same gate despite being half Sol's per-token price. Astra's higher price needs sufficiently less total work or a separately stated high-impact quality/risk reason; neither model name nor price proves that advantage.
+Luna is not always cheaper: extra Sol work can consume the entire saving. Terra is eligible only for tasks requiring actual native desktop computer use, not general coding/CLI debugging or DOM/CDP-only browsing, and must still pass the same cost gate despite being half Sol's per-token price. Astra's higher price needs sufficiently less total work or a separately stated high-impact quality/risk reason; neither model name nor price proves that advantage.
 
 A user-explicit model request takes priority over cost optimization. A consequential risk may justify a consultation that is not cheaper; name that reason and do not label it cost-saving. Never trade away required acceptance to pass the price gate. Keep the one-active-child and information-gain stop rules; no automatic retry ladder.
 
