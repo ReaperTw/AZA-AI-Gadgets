@@ -3,6 +3,9 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+import subprocess
+import sys
+import tasks
 
 spec = importlib.util.spec_from_file_location('usage', Path(__file__).with_name('usage.py'))
 usage = importlib.util.module_from_spec(spec)
@@ -27,12 +30,16 @@ def call(identity, total='0.01', *, side=False):
 
 
 class Accounting(unittest.TestCase):
-    def test_relevant_matches_current_and_historical_skill_names(self):
-        for name in ('AZA-Omp-Orchestrate', 'omp-orchestrate'):
-            rows = [dict(message=dict(role='user', content=[
-                dict(type='text', text=f'Use {name}')]))]
-            self.assertTrue(usage.relevant(rows))
-
+    def test_call_provenance_and_effective_effort(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / 'root.jsonl'
+            write_log(root, 'root', dict(type='thinking_level_change', thinkingLevel='medium'),
+                      call('a'), call('extra', side=True))
+            record = usage.snapshot(root)
+            self.assertEqual(record['calls'][0]['effort'], 'medium')
+            self.assertEqual(record['calls'][1]['effort'], 'unknown')
+            self.assertEqual(record['calls'][0]['session_id'], 'root')
+            self.assertEqual(record['calls'][0]['event_id'], 'a')
     def test_children_side_calls_and_duplicate_events(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp) / 'root.jsonl'
@@ -98,6 +105,91 @@ class Accounting(unittest.TestCase):
             groups = usage.report(store)['groups']
             self.assertEqual(sum(usage.Decimal(g['recorded_api_cost_usd']) for g in groups), usage.Decimal('.01'))
             self.assertEqual(sum(g['shared_calls'] for g in groups), 1)
+
+    def test_task_boundaries_acceptance_rework_and_children(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root, store = Path(tmp) / 'root.jsonl', Path(tmp) / 'store'
+            write_log(root, 'root', call('prior', '1'))
+            task = tasks.begin(root, store, 'parser', 'independent-package', effort='medium')
+            task_id = task['task_id']
+            with self.assertRaises(ValueError):
+                tasks.begin(root, store, 'other', 'small')
+            def append(*events):
+                with root.open('a', encoding='utf-8') as f:
+                    for event in events:
+                        f.write(json.dumps(event) + '\n')
+            append(call('work', '.02'), call('side', '.003', side=True))
+            child = root.with_suffix('') / 'worker.jsonl'
+            write_log(child, 'worker', call('child', '.004'), parentSession='root')
+            tasks.attach(root, store, task_id, child)
+            with self.assertRaises(ValueError):
+                tasks.finish(root, store, task_id, 'accepted', [])
+            tasks.finish(root, store, task_id, 'failed', ['parser-edge:failed'])
+            tasks.resume(root, store, task_id)
+            append(call('repair', '.01'))
+            result = tasks.finish(root, store, task_id, 'accepted', ['parser-edge:passed'])
+            self.assertEqual({c['event_id'] for c in result['calls']}, {'work', 'side', 'child', 'repair'})
+            self.assertEqual([a['outcome'] for a in result['attempts']], ['failed', 'accepted'])
+            report = tasks.report(store)['tasks'][0]
+            self.assertEqual(report['recorded_api_cost_usd'], '0.037')
+            self.assertEqual(report['child_cost_usd'], '0.004')
+            append(call('later', '9'))
+            again = tasks.snapshot(root, result)
+            self.assertEqual(again['calls'], result['calls'])
+            next_task = tasks.begin(root, store, 'other', 'small')
+            with self.assertRaises(ValueError):
+                tasks.resume(root, store, task_id)
+            with self.assertRaises(ValueError):
+                tasks.attach(root, store, next_task['task_id'], child)
+
+    def test_native_title_metadata_does_not_break_task_boundaries(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root, store = Path(tmp) / 'root.jsonl', Path(tmp) / 'store'
+            write_log(root, 'root', call('before'))
+            original = root.read_text(encoding='utf-8')
+            root.write_text(json.dumps({'type': 'title', 'title': 'first'}) + '\n' + original,
+                            encoding='utf-8')
+            record = tasks.begin(root, store, 'parser', 'small')
+            root.write_text(json.dumps({'type': 'title', 'title': 'updated'}) + '\n' + original
+                            + json.dumps(call('work', '.02')) + '\n', encoding='utf-8')
+            result = tasks.finish(root, store, record['task_id'], 'accepted', ['native-boundary:passed'])
+            self.assertEqual([c['event_id'] for c in result['calls']], ['work'])
+
+    def test_task_refuses_rewritten_history_and_foreign_worker(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root, store = Path(tmp) / 'root.jsonl', Path(tmp) / 'store'
+            write_log(root, 'root', call('before'))
+            task = tasks.begin(root, store, 'parser', 'small')
+            foreign = Path(tmp) / 'foreign.jsonl'
+            write_log(foreign, 'foreign', call('foreign'))
+            with self.assertRaises(ValueError):
+                tasks.attach(root, store, task['task_id'], foreign)
+            write_log(root, 'root', call('replacement'))
+            with self.assertRaises(ValueError):
+                tasks.finish(root, store, task['task_id'], 'accepted', ['test:passed'])
+
+    def test_incremental_scan_refreshes_changed_children_only(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            session_root, store = Path(tmp) / 'sessions', Path(tmp) / 'store'
+            root = session_root / 'project' / 'root.jsonl'
+            use = dict(type='message', message=dict(role='user', content=[
+                dict(type='text', text='Use AZA-Omp-Orchestrate')]))
+            write_log(root, 'root', use, call('main'))
+            command = [sys.executable, str(Path(__file__).with_name('usage.py')),
+                       '--data-dir', str(store), 'collect', '--scan', '--sessions-root', str(session_root)]
+            subprocess.run(command, check=True, capture_output=True)
+            snapshot = next(store.glob('*.json'))
+            old = snapshot.read_bytes()
+            subprocess.run(command, check=True, capture_output=True)
+            self.assertEqual(snapshot.read_bytes(), old)
+            child = root.with_suffix('') / 'child.jsonl'
+            write_log(child, 'child', call('child', '.03'), parentSession='root')
+            subprocess.run(command, check=True, capture_output=True)
+            group = usage.report(store)['groups'][0]
+            self.assertEqual(group['recorded_api_cost_usd'], '0.04')
+            child.unlink()
+            subprocess.run(command, check=True, capture_output=True)
+            self.assertEqual(usage.report(store)['groups'][0]['recorded_api_cost_usd'], '0.01')
 
 
 if __name__ == '__main__':

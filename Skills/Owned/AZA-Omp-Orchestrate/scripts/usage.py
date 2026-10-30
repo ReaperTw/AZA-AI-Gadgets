@@ -57,7 +57,11 @@ def snapshot(path):
     for file in [path, *children]:
         rows, extra = (root, []) if file == path else entries(file)
         warnings.extend(extra)
-        for row in rows:
+        source_id = next((r.get('id') for r in rows if r.get('type') == 'session'), None)
+        current_effort = 'unknown'
+        for event_index, row in enumerate(rows):
+            if row.get('type') == 'thinking_level_change':
+                current_effort = row.get('thinkingLevel', 'unknown')
             msg = row.get('message', {})
             if msg.get('role') == 'assistant':
                 if file == path and msg.get('model'):
@@ -94,6 +98,11 @@ def snapshot(path):
                 raise ValueError(f'{file}: invalid recorded cost')
             calls.append({'key': key, 'model': f'{provider}/{model}',
                           'scope': 'main' if file == path else 'child', 'purpose': purpose,
+                          'session_id': source_id,
+                          'event_id': row.get('id'), 'event_index': event_index,
+                          'timestamp': row.get('timestamp', event.get('timestamp')),
+                          'effort': event.get('thinkingLevel', event.get('effort',
+                              current_effort if purpose == 'conversation' else 'unknown')),
                           'tokens': {k: usage.get(k) for k in TOKENS},
                           'recorded_api_cost_usd': str(cost) if cost is not None else None})
     if dispatches > len(children):
@@ -161,6 +170,14 @@ def report(store, include_smoke=False):
     return {'groups': result, 'note': 'Recorded API estimates, not subscription charges. Missing/shared calls or mixed-task sessions limit comparisons. Different tasks do not establish causal savings; include matched Sol-only trials and acceptance outcomes.'}
 
 
+def source_signature(path):
+    """Metadata-only cache: changed sources or collector code force recollection."""
+    files = [path, *sorted(path.with_suffix('').rglob('*.jsonl'))]
+    stats = [(hashlib.sha256(str(f.resolve()).encode()).hexdigest(),
+              f.stat().st_size, f.stat().st_mtime_ns) for f in files]
+    return hashlib.sha256(json.dumps(stats).encode() + Path(__file__).read_bytes()).hexdigest()
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--data-dir', type=Path, default=DEFAULT_STORE)
@@ -173,8 +190,13 @@ def main():
     collect.add_argument('--kind', choices=['real', 'smoke', 'mixed', 'unclassified'])
     collect.add_argument('--task-kind', help='Use a short non-sensitive comparison category, not a prompt')
     summary = commands.add_parser('summary')
+    summary.add_argument('--tasks', action='store_true', help='Report explicit task records, not whole sessions')
     summary.add_argument('--include-smoke', action='store_true')
     args = parser.parse_args()
+    if args.command == 'summary' and args.tasks:
+        import tasks
+        print(json.dumps(tasks.report(args.data_dir, args.include_smoke), ensure_ascii=False, indent=2))
+        return
     if args.command == 'summary':
         print(json.dumps(report(args.data_dir, args.include_smoke), ensure_ascii=False, indent=2))
         return
@@ -184,19 +206,32 @@ def main():
         parser.error('label individual sessions, not all scanned sessions')
     paths = sorted(args.sessions_root.glob('*/*.jsonl')) if args.scan else [args.session]
     saved = 0
+    cache_path = args.data_dir / '.cache' / 'index.json'
+    cache = json.loads(cache_path.read_text(encoding='utf-8')) if cache_path.exists() else {}
     for path in paths:
         try:
+            cache_key = hashlib.sha256(str(path.resolve()).encode()).hexdigest()
+            signature = source_signature(path)
+            previous = cache.get(cache_key, {})
+            target = args.data_dir / previous.get('snapshot', 'absent')
+            if args.scan and previous.get('signature') == signature and (
+                    previous.get('irrelevant') or target.is_file()):
+                continue
             if args.scan:
                 rows, _ = entries(path)
                 if not relevant(rows):
+                    cache[cache_key] = {'signature': signature, 'irrelevant': True}
                     continue
             record = snapshot(path)
-            save(record, args.data_dir, outcome=args.outcome, kind=args.kind, task_kind=args.task_kind)
+            target = save(record, args.data_dir, outcome=args.outcome, kind=args.kind, task_kind=args.task_kind)
+            cache[cache_key] = {'signature': signature, 'snapshot': target.name}
             saved += 1
         except (ValueError, OSError) as exc:
             if not args.scan:
                 raise
             print(f'SKIPPED {path.name}: {exc}')
+    from tasks import persist
+    persist(cache_path, cache)
     print(f'Saved/refreshed {saved} session snapshots in {args.data_dir}')
 
 

@@ -32,7 +32,7 @@ omp --model openai-codex/gpt-6.1-sol --thinking medium
 - 子角色與模型綁定：可攜副本 `agents/` 下的原生定義；實際啟用時放到 `~/.omp/agent/agents/`。Luna 是一般工人；Terra **僅限需要桌面截圖、無障礙介面或滑鼠鍵盤的 computer use**，不處理一般程式／CLI 除錯或純 DOM 瀏覽器操作；Astra 保留必要的架構諮詢。Terra 仍須符合成本、子代理工具可用與人類授權條件。
 - 執行期例外：`runtime.md`，涵蓋 discovery、路由覆寫、深度與真正的 read-only plan mode。
 - 成本權重與計算唯一來源：`cost-policy.md`。依 API 價格分開計算一般輸入、快取輸入與輸出；派工需「子代理＋額外交接／審查＋重工」的保守上界，小於「實際省下的 Sol 工作」下界。相等或區間重疊不算通過；必要的風險／明確指定模型例外要另說明，不能冒稱省錢。此權重不代表訂閱扣額倍率，也不是執行期硬性預算。
-- 實際資料累積：`usage-data.md`。標準函式庫收集器將主控與子代理用量存到 `~/.omp/agent/orchestration-data/`，不複製對話；結束／受阻時 skill 要求刷新快照，也可手動收集與統計。資料不在公開 repository 中。
+- 實際資料累積：`usage-data.md`。標準函式庫工具將資料存到 `~/.omp/agent/orchestration-data/`，不複製對話；`tasks.py` 明確記錄任務邊界、派工理由、開始時的策略／腳本 hash、effort 及驗收證據，`usage.py` 保留整段 session 用量帳並支援增量掃描。兩種統計分開，不把舊快照推測成成功任務。資料不在公開 repository 中。
 
 安裝／更新對照：本目錄的 `SKILL.md`、`README.md`、`runtime.md`、`cost-policy.md`、`usage-data.md`、`LICENSE` 及 `scripts/` 放到 `~/.omp/agent/skills/AZA-Omp-Orchestrate/`；`agents/omp-luna.md`、`omp-terra.md`、`omp-astra.md` 放到 `~/.omp/agent/agents/`。更新後重開 session，使新名稱與 slash command 可用。專案 `.omp/agents/` 中同名定義優先，不能只更新使用者副本就假設該專案也生效；首次使用或異常時確認有效來源。
 
@@ -55,3 +55,5 @@ omp --model openai-codex/gpt-6.1-sol --thinking medium
 用量收集驗證：4 個標準函式庫回歸測試通過，涵蓋主控／子代理／額外模型呼叫、重複 response 去重、同 session 更新不增筆且保留標籤、缺漏成本、未完成 JSONL 尾行、fork 拒收與 smoke 排除。另已用原生 collector 匯入 6 個現存 root-session 快照；已知 smoke 與長對話分別標為 smoke／mixed，其餘未分類、不自動宣稱成功。這些不是 6 組正式成本對照。
 
 精簡版：主 `SKILL.md` 由 9,100 縮為 4,623 字元（減少 49.2%，不是帳單 token 節省率）。診斷實驗細節移至有條件讀取的 `runtime.md`；成本與資料收集仍各有單一參考來源。安裝版 Sol 情境 smoke 確認：小修改 inline、CLI／DOM 不派 Terra、符合條件的桌面 AX 工作可派 Terra、無新資訊不重試、指定 Astra 失敗不替換、必要驗收未執行不算完成、成本相等不派工。未進行桌面操作或新增代理，未變更 effort、價格或安全限制。
+
+任務記錄更新：新增 `scripts/tasks.py` 的 begin／attach／end／resume 與 `usage.py summary --tasks`。9 個回歸測試通過，涵蓋任務分界、驗收證據要求、返工合計、拒絕重疊／外來 worker／來源重寫、原生可變 title metadata、子代理檔案變化與增量掃描。另已在真實原生 session 跑通 begin → end → summary，觀察到區間內 Sol 用量；smoke 任務預設排除、驗收證據保留。這是記帳流程證據，不是成本效益 benchmark。跨 session 重試仍需人工配對；任務結束命令後的最終回覆不在凍結快照內。

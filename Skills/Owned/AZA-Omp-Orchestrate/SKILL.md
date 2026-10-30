@@ -17,6 +17,8 @@ Small or tightly coupled tasks stay inline. Before nontrivial settled work, iden
 
 Give one sentence naming the work removed and acceptance, or the failed gate. Do not solve the package merely to estimate it, or fragment repetitive work into “tiny edits” to avoid assessing handoff.
 
+For actionable work, read `usage-data.md` and begin an explicit task record before implementation; retain its task ID, decision reason and available execution settings. Attach actual worker transcripts to that task. Ordinary Q&A needs no task record; never invent boundaries for old work.
+
 **Ready:** a gate fails → inline; all pass and host permits → actually call `task`, without asking the user to dispatch. A written assignment is not executed work.
 
 ## 2. Hand off
@@ -51,7 +53,7 @@ Inspect artifacts and changed behavior, not a second implementation. Follow host
 
 Return outcome, observed verification and blockers briefly. If delegated, include child ID and meaningful result; observed model comes from runtime metadata or is unverified. No routing report for small inline work.
 
-On completion/blocker run `python scripts/usage.py collect --scan`, resolving the script against this skill directory. If unavailable, say collection was not run. It refreshes local metadata without another model call. Read `usage-data.md` only for labels, storage or comparisons: whole root-session accounting, one fresh session per task, smoke/mixed exclusion, unknown outcomes remain unknown; never bulk-mark scanned sessions accepted.
+After observed acceptance or a blocker, close the task with its outcome and a non-sensitive evidence reference using `scripts/tasks.py`; keep rework on the same task ID. Refresh the current session with `scripts/usage.py collect SESSION`; use incremental `collect --scan` for recovery or when the exact source is unavailable. Resolve script paths against this skill directory. Report unavailable collection, never infer acceptance or substitute whole-session totals for task costs. `usage-data.md` owns commands, privacy, boundary and comparison limits.
 
 ## Provenance
 
