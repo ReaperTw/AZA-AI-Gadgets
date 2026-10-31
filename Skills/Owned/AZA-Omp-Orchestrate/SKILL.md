@@ -1,9 +1,12 @@
 ---
 name: AZA-Omp-Orchestrate
-description: Use for cost-aware Sol/Luna delegation in omp, with desktop-only Terra and exceptional Astra consultation.
+description: User-invoked Sol/Luna orchestration in omp, with desktop-only Terra and exceptional Astra consultation.
+disable-model-invocation: true
 ---
 
 # AZA-Omp-Orchestrate
+
+Activate only when the user names `AZA-Omp-Orchestrate` or explicitly requests this orchestration workflow. General coding, research or delegation alone is not a trigger. If a host ignores `disable-model-invocation`, this explicit-user trigger still applies.
 
 Sol owns decisions, integration and acceptance. Delegate complete work, not repeated reasoning. Preserve planning-only scope; this skill does not switch models.
 

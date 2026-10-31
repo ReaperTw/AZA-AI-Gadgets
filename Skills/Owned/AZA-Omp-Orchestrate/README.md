@@ -22,7 +22,7 @@ omp --model openai-codex/gpt-6.1-sol --thinking medium
 /skill:AZA-Omp-Orchestrate 實作這個功能。Sol 掌舵；可完整交付、且交接划算的工作交給 Luna，其他直接完成。不要重複實作，整合後驗證。
 ```
 
-自然語言要求這組多模型協作也會符合 skill 的觸發描述。Slash command 需 omp 的 skill commands 功能已啟用；若停用，在提示中直接要求讀取並使用 `AZA-Omp-Orchestrate`。
+僅在你點名 `AZA-Omp-Orchestrate` 或明確要求使用這套調度流程時啟用；一般寫碼、研究或提到委派不會自行啟用。`SKILL.md` 設定 `disable-model-invocation: true`；不支援此欄位的宿主仍依明確使用者觸發條件執行。Slash command 需 omp 的 skill commands 功能已啟用；若停用，直接要求讀取並使用 `AZA-Omp-Orchestrate`。
 
 主 session 用 Sol；skill 不會自動切換主模型。預設不開子代理，需要時同時最多一個；只有你明確要求平行、且工作互不干涉時才放寬。小任務或緊密耦合工作由 Sol 完成。Luna 保持 medium effort；Sol 的 effort 沿用你啟動時的選擇，並非 skill 強制設定。
 
